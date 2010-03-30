@@ -1,0 +1,61 @@
+# Copyright David Abrahams 2006. Distributed under the Boost
+# Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# Specify the path to the Boost project.  If you move this project,
+# adjust the path to refer to the Boost root directory.
+use-project boost 
+  : /home/macieks/boost/boost_1_42_0 ;
+
+lib boost_thread : : <name>boost_thread <search>/usr/lib ;
+lib boost_regex : : <name>boost_regex <search>/usr/lib ;
+
+lib vomsapi_gcc64dbgpthr : : <name>vomsapi_gcc64dbgpthr <search>/opt/glite/lib64 ;
+lib gridsite : : <name>gridsite <search>/opt/glite/lib64 ;
+lib glite_security_gsoap_plugin_276b_gcc64dbgpthr : : <name>glite_security_gsoap_plugin_276b_gcc64dbgpthr <search>/opt/glite/lib ;
+lib glite_ce_cream_client_soap : : <name>glite_ce_cream_client_soap <search>/opt/glite/lib64 ;
+lib glite_ce_cream_client_util : : <name>glite_ce_cream_client_util <search>/opt/glite/lib64 ;
+lib cares : : <name>cares <search>/opt/c-ares/lib ;
+lib classad_ns : : <name>classad_ns <search>/opt/classads/lib64 ;
+lib log4cpp : : <name>log4cpp <search>/usr/lib64 ;
+
+# Set up the project-wide requirements that everything uses the
+# boost_python library defined in the project whose global ID is
+# /boost/python.
+project Cream_bindings
+  : requirements
+  	<library>/boost/python//boost_python
+
+	<include>./
+	<include>/opt/glite/include
+
+	<library>boost_thread
+	<library>boost_regex
+
+	<library>gridsite
+	<library>vomsapi_gcc64dbgpthr
+	<library>glite_security_gsoap_plugin_276b_gcc64dbgpthr
+	<library>glite_ce_cream_client_soap
+	<library>glite_ce_cream_client_util
+	<library>cares
+	<library>classad_ns
+	<library>log4cpp
+    ;
+
+# Make the definition of the python-extension rule available
+import python ;
+
+# Declare a Python extension called hello.
+python-extension Cream : Cream.cpp ;
+
+import testing ;
+
+# Declare a test of the extension module
+testing.make-test run-pyd : Cream test_Cream.py : : test_Cream ;
+
+# Create a "test" target that runs all the tests
+alias test : test_Cream ;
+
+# make sure the tests don't run by default
+explicit test_Cream test ;
+
