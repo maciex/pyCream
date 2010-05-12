@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
 import sys
-import string
 
-from random import Random
 from Cream import *
 
 def main():
-	#
-	#    A delegated proxy must have a string identifier. Try to choose it as unique as possible
-	#
-	delegationID    = "DelegationID"
 
-	connection_timeout = 30 # seconds
+	connection_timeout = 30  # seconds
 
-	creamClient = CreamProxyFactory.make_CreamProxyDelegate( delegationID, connection_timeout );
+	#
+	#  Set the enable or disable submission by choosing the boolean value...
+	#
+
+	enable = True # or False
+
+	creamClient = CreamProxyFactory.make_CreamProxyAcceptNewJobSubmissions(enable, connection_timeout)
 
 	#
 	# [...]
@@ -24,8 +24,7 @@ def main():
 	# [...]
 	#
 
-	serviceAddress = "https://cream-2-fzk.gridka.de:8443/ce-cream/services/gridsite-delegation";
-
+	serviceAddress = "https://cream-2-fzk.gridka.de:8443/ce-cream/services/CREAM2"
 
 	try:
 		creamClient.setCredential( "/tmp/x509up_u1000" )
@@ -36,7 +35,6 @@ def main():
 		print "FATAL: " + ex.what()
 		return 1
 
-	print "Proxy with delegation id [" + delegationID + "] succesfully delegated to endpoint [" + serviceAddress + "]"
 	return 0
 
 if __name__ == "__main__":

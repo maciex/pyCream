@@ -8,13 +8,13 @@ from Cream import *
 
 def main():
 	#
-	#    A delegated proxy must have a string identifier. Try to choose it as unique as possible
+	#    Put here the identifier string of a previously delegated proxy
 	#
 	delegationID    = "DelegationID"
 
 	connection_timeout = 30 # seconds
 
-	creamClient = CreamProxyFactory.make_CreamProxyDelegate( delegationID, connection_timeout );
+	creamClient = CreamProxyFactory.make_CreamProxy_ProxyRenew( delegationID, connection_timeout );
 
 	#
 	# [...]
@@ -26,7 +26,6 @@ def main():
 
 	serviceAddress = "https://cream-2-fzk.gridka.de:8443/ce-cream/services/gridsite-delegation";
 
-
 	try:
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
@@ -36,7 +35,7 @@ def main():
 		print "FATAL: " + ex.what()
 		return 1
 
-	print "Proxy with delegation id [" + delegationID + "] succesfully delegated to endpoint [" + serviceAddress + "]"
+	print "Proxy with delegation id [" + delegationID + "] succesfully renewed to endpoint [" + serviceAddress + "]"
 	return 0
 
 if __name__ == "__main__":
