@@ -35,7 +35,8 @@ def generate_code():
 
 	xml_cached_fc = parser.create_cached_source_fc(
 		os.path.join( environment.root_dir, "python_Cream.h" )
-		, environment.cache_file )
+		, environment.cache_file
+		)
 	mb = module_builder.module_builder_t(
 		[ xml_cached_fc ]
 		, working_directory=environment.root_dir
@@ -43,7 +44,7 @@ def generate_code():
 		, define_symbols=defined_symbols
 		, undefine_symbols=undefine_symbols
 		, indexing_suite_version=2
-		)
+	)
 
 	# Register boost::tuples
 	mb.add_registration_code( 'boost::python::register_tuple< boost::tuple<glite::ce::cream_client_api::soap_proxy::JobIdWrapper::RESULT, glite::ce::cream_client_api::soap_proxy::JobIdWrapper, std::string>  >();' );
@@ -63,12 +64,16 @@ def generate_code():
 	# I think it's a quite new function (even not yet documented, so no idea which params are in/out)
 	mb.class_( 'CreamProxyFactory' ).mem_fun( 'make_CreamProxy_QueryEvent' ).exclude()
 
-	# Take care of call policies for some functions
-	# CreamProxyFactory
-	mb.class_( name='CreamProxyFactory' ).member_functions( lambda decl: decl.name.startswith( 'make_CreamProxy' ) ).call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
+    # Take care of call policies for some functions
+    # CreamProxyFactory
+    mb.class_( name='CreamProxyFactory' ).member_functions( lambda decl: decl.name.startswith( 'make_CreamProxy' ) ).call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
 
+    # Translate exceptions
+    for ex in environment.exception_classes:
+        exception = mb.class_( ex )
+        exception.translate_exception_to_string( ex, 'exc.what()')
 
-	# Function transformations
+    # Function transformations
 
 	# JobPropertyWrapper has protected operator=
 	mb.class_( 'JobPropertyWrapper' ).noncopyable = True
@@ -79,8 +84,8 @@ def generate_code():
 	#	mb.print_declarations()
 
 	#def my_doc_extractor( decl ):
-	#	print decl.location.file_name + str( decl.location.line )
-	#	return decl.location.file_name + str( decl.location.line )
+		#	print decl.location.file_name + str( decl.location.line )
+		#	return decl.location.file_name + str( decl.location.line )
 
 	# Creating code creator. After this step you should not modify/customize declarations.
 	# Additionaly extract Doxygen like documentation
