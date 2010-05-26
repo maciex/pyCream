@@ -30,10 +30,8 @@ def main():
 	try:
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
-	except (BaseException,  InvalidArgumentException, GridProxyDelegationException, JobSubmissionDisabledException,
-			JobStatusInvalidException, JobUnknownException, GenericException, AuthorizationException, DelegationException,
-			InternalException, ConnectionTimeoutException, auth_ex, soap_ex, soap_runtime_ex), ex:
-		print "FATAL: " + ex.what()
+	except Exception, ex:
+		print "FATAL: ", ex
 		return 1
 
 	for job in jobIdWrapperVetor:

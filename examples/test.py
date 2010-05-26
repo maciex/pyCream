@@ -56,10 +56,9 @@ def delegate():
 	try:
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
-	except (BaseException,  InvalidArgumentException, GridProxyDelegationException, JobSubmissionDisabledException,
-			JobStatusInvalidException, JobUnknownException, GenericException, AuthorizationException, DelegationException,
-			InternalException, ConnectionTimeoutException, auth_ex, soap_ex, soap_runtime_ex), ex:
-		print "FATAL: " + ex.what()
+	except Exception, ex:
+		print "FATAL: ", ex
+		print type( ex )
 		raise Exception("Failed to delegate proxy")
 
 	print "Proxy with delegation id [" + delegationID + "] succesfully delegated to endpoint [" + serviceAddress + "]"
@@ -114,10 +113,8 @@ def register():
 		#
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
-	except (BaseException,  InvalidArgumentException, GridProxyDelegationException, JobSubmissionDisabledException,
-			JobStatusInvalidException, JobUnknownException, GenericException, AuthorizationException, DelegationException,
-			InternalException, ConnectionTimeoutException, auth_ex, soap_ex, soap_runtime_ex), ex:
-		print "FATAL: " + ex.what()
+	except Exception, ex:
+		print "FATAL: ", ex
 		return 1
 
 	#
@@ -213,10 +210,8 @@ def start():
 		#
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
-	except (BaseException,  InvalidArgumentException, GridProxyDelegationException, JobSubmissionDisabledException,
-			JobStatusInvalidException, JobUnknownException, GenericException, AuthorizationException, DelegationException,
-			InternalException, ConnectionTimeoutException, auth_ex, soap_ex, soap_runtime_ex), ex:
-		print "FATAL: " + ex.what()
+	except Exception, ex:
+		print "FATAL: ", ex
 		return 1
 
 	print "Job started"
@@ -307,10 +302,8 @@ def status():
 		#
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
-	except (BaseException,  InvalidArgumentException, GridProxyDelegationException, JobSubmissionDisabledException,
-			JobStatusInvalidException, JobUnknownException, GenericException, AuthorizationException, DelegationException,
-			InternalException, ConnectionTimeoutException, auth_ex, soap_ex, soap_runtime_ex), ex:
-		print "FATAL: " + ex.what()
+	except Exception, ex:
+		print "FATAL: ", ex
 		return 1
 
 	#
@@ -398,10 +391,8 @@ def info():
 		#
 		creamClient.setCredential( "/tmp/x509up_u1000" )
 		creamClient.execute( serviceAddress )
-	except (BaseException,  InvalidArgumentException, GridProxyDelegationException, JobSubmissionDisabledException,
-			JobStatusInvalidException, JobUnknownException, GenericException, AuthorizationException, DelegationException,
-			InternalException, ConnectionTimeoutException, auth_ex, soap_ex, soap_runtime_ex), ex:
-		print "FATAL: " + ex.what()
+	except Exception, ex:
+		print "FATAL: ", ex
 		return 1
 
 	#
@@ -437,18 +428,16 @@ def stop():
 
 
 if __name__ == "__main__":
-#	try:
-	delegate()
-	register()
-	start()
-	status()
-	info()
-	stop()
-	status()
-	print "Test successfull!"
-
-#	except ex:
-#		print "Test failed!"
-#		print ex.what()
-
+    try:
+        delegate()
+        register()
+        start()
+        status()
+        info()
+        stop()
+        status()
+        print "Test successfull!"
+    except Exception, ex:
+        print "Test failed!"
+        print ex
 
