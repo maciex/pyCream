@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.6
 
 import os
 
@@ -91,7 +91,7 @@ exclude_classes = [ ]
 include_dirs = [ 
         os.getcwd()
         , "/usr/include"
-        , "/usr/include/python2.4"
+        , "/usr/include/python2.6"
         , "/opt/glite/include"
         , "/opt/glite/include/glite/ce/cream-client-api-c"
         ]

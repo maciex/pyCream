@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.6
 
 import os, time
 
@@ -13,7 +13,7 @@ from pyplusplus import module_builder
 from pyplusplus import function_transformers as FT
 from pyplusplus.module_builder import directory_cache_t
 from pyplusplus.module_builder import call_policies
-from pyplusplus.decl_wrappers import doxygen
+#from pyplusplus.decl_wrappers import doxygen
 
 import environment
 
@@ -34,17 +34,17 @@ def generate_code():
 	undefine_symbols = []
 
 	xml_cached_fc = parser.create_cached_source_fc(
-		os.path.join( environment.root_dir, "python_Cream.h" )
-		, environment.cache_file
-		)
+			os.path.join( environment.root_dir, "python_Cream.h" )
+			, environment.cache_file
+			)
 	mb = module_builder.module_builder_t(
-		[ xml_cached_fc ]
-		, working_directory=environment.root_dir
-		, include_paths=environment.include_dirs
-		, define_symbols=defined_symbols
-		, undefine_symbols=undefine_symbols
-		, indexing_suite_version=2
-	)
+			[ xml_cached_fc ]
+			, working_directory=environment.root_dir
+			, include_paths=environment.include_dirs
+			, define_symbols=defined_symbols
+			, undefine_symbols=undefine_symbols
+			, indexing_suite_version=2
+			)
 
 	# Register boost::tuples
 	mb.add_registration_code( 'boost::python::register_tuple< boost::tuple<glite::ce::cream_client_api::soap_proxy::JobIdWrapper::RESULT, glite::ce::cream_client_api::soap_proxy::JobIdWrapper, std::string>  >();' );
@@ -64,16 +64,16 @@ def generate_code():
 	# I think it's a quite new function (even not yet documented, so no idea which params are in/out)
 	mb.class_( 'CreamProxyFactory' ).mem_fun( 'make_CreamProxy_QueryEvent' ).exclude()
 
-    # Take care of call policies for some functions
-    # CreamProxyFactory
-    mb.class_( name='CreamProxyFactory' ).member_functions( lambda decl: decl.name.startswith( 'make_CreamProxy' ) ).call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
+	# Take care of call policies for some functions
+	# CreamProxyFactory
+	mb.class_( name='CreamProxyFactory' ).member_functions( lambda decl: decl.name.startswith( 'make_CreamProxy' ) ).call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
 
-    # Translate exceptions
-    for ex in environment.exception_classes:
-        exception = mb.class_( ex )
-        exception.translate_exception_to_string( ex, 'exc.what()')
+	# Translate exceptions
+	for ex in environment.exception_classes:
+		exception = mb.class_( ex )
+		exception.translate_exception_to_string( ex, 'exc.what()')
 
-    # Function transformations
+	# Function transformations
 
 	# JobPropertyWrapper has protected operator=
 	mb.class_( 'JobPropertyWrapper' ).noncopyable = True
@@ -94,7 +94,7 @@ def generate_code():
 	#mb.build_code_creator( module_name='Cream', doc_extractor=my_doc_extractor )
 
 
-	mb.code_creator.add_include( 'tuples.hpp' )
+	mb.code_creator.add_include( 'pyplusplus_converters/tuples.hpp' )
 	mb.code_creator.precompiled_header = 'boost/python.hpp'
 
 	# It is common requirement in software world - each file should have license
@@ -106,11 +106,6 @@ def generate_code():
 
 	# Writing code to file.
 	mb.write_module( "Cream.cpp" )
-	#mb.split_module(
-	#		  "src"
-	#		, on_unused_file_found=os.remove
-	#		, use_files_sum_repository=True
-	#		)
 
 
 if __name__ == '__main__':

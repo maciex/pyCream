@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python26
 
 import sys
 import string
@@ -58,7 +58,6 @@ def delegate():
 		creamClient.execute( serviceAddress )
 	except Exception, ex:
 		print "FATAL: ", ex
-		print type( ex )
 		raise Exception("Failed to delegate proxy")
 
 	print "Proxy with delegation id [" + delegationID + "] succesfully delegated to endpoint [" + serviceAddress + "]"
