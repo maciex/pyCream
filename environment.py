@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python2.7
 
 import os
 
@@ -9,15 +9,16 @@ _DEBUG = True
 #
 module_name = "Cream"
 namespaces = [
-        "glite::ce::cream_client_api::util"
-        , "glite::ce::cream_client_api::util::CEUrl"
+        "glite::ce::cream_client_api::cream_exceptions"
+        , "glite::ce::cream_client_api::job_statuses"
         , "glite::ce::cream_client_api::soap_proxy"
-        , "glite::ce::cream_client_api::cream_exceptions"
+        , "glite::ce::cream_client_api::util"
+        , "glite::ce::cream_client_api::util::CEUrl"
         ]
 
 headers = [ "python_Cream.h" ] 
 
-include_classes = [
+classes = [
         # Include some STL templates
         'pair<long, long>'
         , 'pair<std::string, long>'
@@ -52,6 +53,18 @@ include_classes = [
         , 'JobStatusWrapper'
         , 'ResultWrapper'
         , 'ServiceInfoWrapper'
+        ]
+
+# Cream enumerations
+enumerations = [
+        'job_status'
+        ]
+
+# Cream functions
+functions = [
+        'getStatusNum'
+        , 'isFailed'
+        , 'isFinished'
         ]
 
 # Cream exceptions
@@ -91,7 +104,7 @@ exclude_classes = [ ]
 include_dirs = [ 
         os.getcwd()
         , "/usr/include"
-        , "/usr/include/python2.6"
+        , "/opt/b2cgs/python2.7/include/python2.7"
         , "/opt/glite/include"
         , "/opt/glite/include/glite/ce/cream-client-api-c"
         ]

@@ -18,10 +18,11 @@
 // First we create a magic namespace to hold all our aliases
 namespace pyplusplus {
 	namespace aliases {
+		using namespace glite::ce::cream_client_api::cream_exceptions;
+		using namespace glite::ce::cream_client_api::job_statuses;
+		using namespace glite::ce::cream_client_api::soap_proxy;
 		using namespace glite::ce::cream_client_api::util;
 		using namespace glite::ce::cream_client_api::util::CEUrl;
-		using namespace glite::ce::cream_client_api::soap_proxy;
-		using namespace glite::ce::cream_client_api::cream_exceptions;
 #include "python_Cream_aliases.h"
 	}
 }
@@ -30,10 +31,11 @@ namespace pyplusplus {
 namespace python_Cream {
 	namespace details {
 		inline void instantiate() {
+			using namespace glite::ce::cream_client_api::cream_exceptions;
+			using namespace glite::ce::cream_client_api::job_statuses;
+			using namespace glite::ce::cream_client_api::soap_proxy;
 			using namespace glite::ce::cream_client_api::util;
 			using namespace glite::ce::cream_client_api::util::CEUrl;
-			using namespace glite::ce::cream_client_api::soap_proxy;
-			using namespace glite::ce::cream_client_api::cream_exceptions;
 
 			using namespace pyplusplus::aliases;
 #include "python_Cream_sizeof.h"

@@ -4,6 +4,11 @@
 BUILD_TYPE=release
 
 GEN_SCRIPT = generate_code.py
+
+PYCPP_SCRIPTS = \
+	environment.py \
+	generate_code.py
+
 HEADERS = \
 	python_Cream.h \
 	python_Cream_aliases.h \
@@ -24,14 +29,14 @@ GENERATED = \
 ./bin/gcc-4.1.2/$(BUILD_TYPE)/Cream.so: Jamroot boost-build.jam temp_fix
 	BOOST_ROOT=$(BOOST_ROOT) BOOST_BUILD_PATH=$(BOOST_BUILD_PATH) bjam -d+2 $(BUILD_TYPE)
 
-Cream.cpp: $(HEADERS) $(GEN_SCRIPT) temporary_fix.sh
-	python2.6 $(GEN_SCRIPT)
+Cream.cpp: $(HEADERS) $(PYCPP_SCRIPTS) temporary_fix.sh
+	python2.7 $(GEN_SCRIPT)
 
 temp_fix: Cream.cpp temporary_fix.sh
 	./temporary_fix.sh Cream.cpp
 
 test: ./bin/gcc-4.1.2/$(BUILD_TYPE)/Cream.so
-	PYTHONPATH="./bin/gcc-4.1.2/$(BUILD_TYPE)" python26 examples/test.py
+	PYTHONPATH="./bin/gcc-4.1.2/$(BUILD_TYPE)" python2.7 examples/test.py
 
 clean:
 	rm -fr $(GENERATED)

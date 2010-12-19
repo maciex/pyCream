@@ -31,6 +31,7 @@
 #include <glite/ce/cream-client-api-c/classad_syntax_ex.h>
 #include <glite/ce/cream-client-api-c/file_ex.h>
 #include <glite/ce/cream-client-api-c/invalidTimestamp_ex.h>
+#include <glite/ce/cream-client-api-c/job_statuses.h>
 #include <glite/ce/cream-client-api-c/soap_ex.h>
 #include <glite/ce/cream-client-api-c/soap_runtime_ex.h>
 #include <glite/ce/cream-client-api-c/AuthorizationException.h>
