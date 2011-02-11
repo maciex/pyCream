@@ -96,8 +96,6 @@ exception_classes = [
         #		, 'RegisterArrayRequest'
         ]
 
-exclude_classes = [ ]
-
 #
 #
 #
