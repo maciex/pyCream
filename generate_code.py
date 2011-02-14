@@ -51,9 +51,12 @@ def generate_code():
 	mb.add_registration_code( 'boost::python::register_tuple< boost::tuple<glite::ce::cream_client_api::soap_proxy::JobStatusWrapper::RESULT, glite::ce::cream_client_api::soap_proxy::JobStatusWrapper, std::string> >();' );
 	mb.add_registration_code( 'boost::python::register_tuple< boost::tuple<glite::ce::cream_client_api::soap_proxy::JobInfoWrapper::RESULT, glite::ce::cream_client_api::soap_proxy::JobInfoWrapper, std::string> >();' );
 
-	# Include classes
+	# Expose classes
 	mb.classes( lambda cls: cls.name in environment.classes ).include()
+        # Expose enumerations
 	mb.enumerations( lambda cls: cls.name in environment.enumerations ).include()
+        # Expose functions
+        mb.free_funs( lambda fun: fun.name in environment.functions ).include()
 
 	# Exclude all protected functions
 	mb.calldefs( access_type_matcher_t( 'protected' ) ).exclude()
