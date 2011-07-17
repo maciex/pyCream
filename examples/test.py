@@ -19,7 +19,8 @@ serviceHost = "https://cream-2-fzk.gridka.de:8443"
 #
 #  A simple JDL describing a fake job
 #
-JDL = "[ VirtualOrganisation=\"belle\"; BatchSystem=\"pbs\"; QueueName = \"short\"; executable=\"/bin/sleep\"; arguments=\"120\"; ]"
+JDL = "[ VirtualOrganisation=\"belle\"; BatchSystem=\"pbs\"; QueueName = \"short\"; executable=\"/bin/sleep\"; arguments=\"20\"; ]"
+JDL2 = "[ VirtualOrganisation=\"belle\"; BatchSystem=\"pbs\"; QueueName = \"short\"; executable=\"/bin/sleep\"; arguments=\"10\"; ]"
 
 leaseID         = "" # YOU'RE NOT INTERESTED TO IT NOW
 delegationProxy = "" # YOU'RE NOT INTERESTED TO IT NOW
@@ -33,6 +34,8 @@ autostart = False
 
 CreamJID = ""
 CreamURL = ""
+CreamJID2 = ""
+CreamURL2 = ""
 
 
 
@@ -138,6 +141,100 @@ def register():
 
 	print "Cream Job ID=[" + CreamJID + "]"
 	print "InputSandBox Upload URL=[" + ISB_upload_url + "]"
+
+	return 0
+
+# Many Jobs registration
+def registerMany():
+
+	global JDL
+	global JDL2
+	global serviceHost
+	global delegationID
+	global delegationProxy
+	global leaseID
+	global autostart
+	global CreamURL
+	global CreamJID
+	global CreamURL2
+	global CreamJID2
+
+	print "\n==> Many jobs registration"
+
+	#
+	#  Create a JobDescription for the job. Note the "foo" string that identifies this job. When registering
+	#  multiple jobs with a single JobRegister operation, the "foo" ID is needed to identify this
+	#  particular job in the server's response that will contain information about registration of all jobs.
+	#  See below...
+	#
+	jd = JobDescriptionWrapper(JDL, delegationID, delegationProxy, leaseID, autostart, "foo")
+	jd2 = JobDescriptionWrapper(JDL2, delegationID, delegationProxy, leaseID, autostart, "foo2")
+
+	properties = stdMapStringString()
+	properties2 = stdMapStringString()
+
+	reqs = RegisterArrayRequest()
+	reqs.append( jd )
+	reqs.append( jd2 )
+	resp = RegisterArrayResult()
+
+	creamClient = CreamProxyFactory.make_CreamProxyRegister( reqs, resp, connection_timeout )
+
+	#
+	# [...]
+	#
+	# BE CAREFUL !!!
+	#
+	# Please Check the 'NULLNESS' of the creamClient variable and take the proper action if it is NULL
+	#
+	# [...]
+	#
+
+	serviceAddress = serviceHost + "/ce-cream/services/CREAM2"
+
+	try:
+		#
+		# /tmp/x509up_u501 is a proxy file generated with voms-proxy-init
+		#
+		creamClient.setCredential( "/tmp/x509up_u1000" )
+		creamClient.execute( serviceAddress )
+	except Exception, ex:
+		print "FATAL: ", ex
+		return 1
+
+	#
+	# Identify our job using the "foo" ID extracting the value corresponding to the 
+	# key "foo" of the resp std::map.
+	#
+	registrationResponse = resp["foo"]
+	registrationResponse2 = resp["foo2"]
+
+	#
+	# Use the boost function to extract relevant information for registered job.
+	#
+	if JobIdWrapper.OK != registrationResponse[0]:
+		print "FATAL: " + registrationResponse[2]
+		return 1
+	if JobIdWrapper.OK != registrationResponse2[0]:
+		print "FATAL: " + registrationResponse2[2]
+		return 1
+
+	CreamURL  = registrationResponse[1].getCreamURL()
+	CreamURL2  = registrationResponse2[1].getCreamURL()
+	CreamJID  = registrationResponse[1].getCreamJobID()
+	CreamJID2  = registrationResponse2[1].getCreamJobID()
+	#CreamJID  = creamURL + "/" + CreamJID
+	#CreamJID2  = creamURL2 + "/" + CreamJID2
+
+	registrationResponse[1].getProperties( properties )
+	registrationResponse2[1].getProperties( properties2 )
+	ISB_upload_url = properties["CREAMInputSandboxURI"]
+	ISB_upload_url2 = properties2["CREAMInputSandboxURI"]
+
+	print "Cream Job ID=[" + CreamJID + "]"
+	print "Cream Job2 ID=[" + CreamJID2 + "]"
+	print "InputSandBox Upload URL=[" + ISB_upload_url + "]"
+	print "InputSandBox2 Upload URL=[" + ISB_upload_url2 + "]"
 
 	return 0
 
@@ -430,6 +527,7 @@ if __name__ == "__main__":
     try:
         delegate()
         register()
+#        registerMany()
         start()
         status()
         info()
