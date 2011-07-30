@@ -1,0 +1,9 @@
+
+### Basic installation
+
+    1. Set environment variables BOOST_ROOT and BOOST_BUILD_PATH to point on
+       a proper boost directory
+    2. Run 'make'
+    3. Start using Cream module from within Python after placing the Cream.so
+       library on the PYTHONPATH environment variable
+

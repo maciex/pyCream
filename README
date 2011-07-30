@@ -1,0 +1,20 @@
+pyCream - CREAM Client Python API
+
+### Description 
+pyCream is a Python module, a set of bindings for accessing CREAM Client API
+from Python. Created using C++ Python language bindings framework - pyplusplus (http://pygccxml.sf.net)
+
+### Requirements
+Same as for CREAM Client C++ API
+
+### Build requirements
+- pygccxml
+- pyplusplus
+- boost
+
+### License
+GPL v3 or newer
+
+### Authors
+Maciej Sitarz <macieksitarz@wp.pl>
+
