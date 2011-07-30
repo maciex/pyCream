@@ -67,7 +67,7 @@ project Cream_bindings
 # Make the definition of the python-extension rule available
 import python ;
 
-# Declare a Python extension called hello.
+# Declare a Python extension called Cream.
 python-extension Cream : Cream.cpp ;
 
 import testing ;
